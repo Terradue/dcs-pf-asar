@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Task_Table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TaskTable.xsd">
+   <Processor_Name>ASAR_APG_L1B</Processor_Name>
+   <Version>06.00</Version>
+   <Test>No</Test>
+   <Min_Disk_Space units="MB">1130</Min_Disk_Space><!--based on PO-RS-MDA-GS-2009 max product size * 2-->
+   <Max_Time units="sec">0</Max_Time><!--no time limit for execution-->
+   <Processing_Parameters count="4">
+      <Processing_Parameter mandatory="true">
+         <Param_Name>Product_Counter</Param_Name>
+         <Param_Type>Number</Param_Type>
+         <Param_Description>Product Counter for product names</Param_Description>
+      </Processing_Parameter>
+      <Processing_Parameter mandatory="true">
+         <Param_Name>Processing_Stage_Flag</Param_Name>
+         <Param_Type>Enumeration</Param_Type>
+         <Param_Valid>N</Param_Valid>
+         <Param_Valid>V</Param_Valid>
+         <Param_Valid>S</Param_Valid>
+         <Param_Valid>T</Param_Valid>
+         <Param_Valid>O</Param_Valid>
+         <Param_Valid>P</Param_Valid>
+         <Param_Valid>Q</Param_Valid>
+         <Param_Valid>R</Param_Valid>
+         <Param_Valid>U</Param_Valid>
+         <Param_Default>T</Param_Default>
+         <Param_Description>Processing stage flag</Param_Description>
+      </Processing_Parameter>
+      <Processing_Parameter mandatory="true">
+         <Param_Name>originator_ID</Param_Name>
+         <Param_Type>String</Param_Type>
+         <Param_Description>Originator ID string for product names</Param_Description>
+         <Param_Default>GPD</Param_Default>
+      </Processing_Parameter>
+      <Processing_Parameter mandatory="true">
+         <Param_Name>Map_Projection</Param_Name>
+         <Param_Type>Enumeration</Param_Type>
+         <Param_Valid>None</Param_Valid>
+         <Param_Valid>UTM</Param_Valid>
+         <Param_Valid>UPS</Param_Valid>
+         <Param_Valid>LCC</Param_Valid>
+         <Param_Valid>TM</Param_Valid>
+         <Param_Valid>MERC</Param_Valid>
+         <Param_Valid>PS</Param_Valid>
+         <Param_Default>UTM</Param_Default>
+         <Param_Description>Map projection for Geocoded products</Param_Description>
+      </Processing_Parameter>
+   </Processing_Parameters>
+   <Private_Config>
+      <List_of_Cfg_Files count="1">
+         <Cfg_File>
+            <Version></Version>
+            <File_Name></File_Name>
+         </Cfg_File>
+      </List_of_Cfg_Files>
+      <Default/>
+   </Private_Config>
+   <List_of_Config_Spaces count="1">
+      <Config_Space/>
+   </List_of_Config_Spaces>
+   <List_of_Pools count="1">
+      <Pool>
+         <Detached>false</Detached>
+         <Killing_Signal>15</Killing_Signal>
+         <List_of_Tasks count="1">
+            <Task>
+               <Name>PF_ASAR</Name>
+               <Version>06.00</Version>
+               <Critical>true</Critical>
+               <Criticality_Level>1</Criticality_Level>
+               <File_Name>$MDAC/bin/ASM_AsarStart.sh</File_Name>
+               <List_of_Inputs count="6">
+                  <Input>
+                     <Mode>ALWAYS</Mode>
+                     <Mandatory>No</Mandatory>
+                     <List_of_Alternatives count="3">
+                        <Alternative>
+                           <Order>1</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>ASA_APC_0P</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>true</Input_Source_Data>
+                        </Alternative>
+                        <Alternative>
+                           <Order>2</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>ASA_APV_0P</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>true</Input_Source_Data>
+                        </Alternative>
+                        <Alternative>
+                           <Order>3</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>ASA_APH_0P</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>true</Input_Source_Data>
+                        </Alternative>
+                     </List_of_Alternatives>
+                  </Input>
+                  <Input>
+                     <Mode>ALWAYS</Mode>
+                     <Mandatory>Yes</Mandatory>
+                     <List_of_Alternatives count="1">
+                        <Alternative>
+                           <Order>1</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>ASA_XCA_AX</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>false</Input_Source_Data>
+                        </Alternative>
+                     </List_of_Alternatives>
+                  </Input>
+                  <Input>
+                     <Mode>ALWAYS</Mode>
+                     <Mandatory>Yes</Mandatory>
+                     <List_of_Alternatives count="1">
+                        <Alternative>
+                           <Order>1</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>ASA_XCH_AX</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>false</Input_Source_Data>
+                        </Alternative>
+                     </List_of_Alternatives>
+                  </Input>
+                  <Input>
+                     <Mode>ALWAYS</Mode>
+                     <Mandatory>Yes</Mandatory>
+                     <List_of_Alternatives count="1">
+                        <Alternative>
+                           <Order>1</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>ASA_INS_AX</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>false</Input_Source_Data>
+                        </Alternative>
+                     </List_of_Alternatives>
+                  </Input>
+                  <Input>
+                     <Mode>ALWAYS</Mode>
+                     <Mandatory>Yes</Mandatory>
+                     <List_of_Alternatives count="1">
+                        <Alternative>
+                           <Order>1</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>ASA_CON_AX</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>false</Input_Source_Data>
+                        </Alternative>
+                     </List_of_Alternatives>
+                  </Input>
+                  <Input>
+                     <Mode>ALWAYS</Mode>
+                     <Mandatory>No</Mandatory>
+                     <List_of_Alternatives count="4">
+                        <Alternative>
+                           <Order>1</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>DOR_VOR_AX</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>false</Input_Source_Data>
+                        </Alternative>
+                        <Alternative>
+                           <Order>2</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>DOR_POR_AX</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>false</Input_Source_Data>
+                        </Alternative>
+                        <Alternative>
+                           <Order>3</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>AUX_FRO_AX</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>false</Input_Source_Data>
+                        </Alternative>
+                        <Alternative>
+                           <Order>4</Order>
+                           <Origin>DB</Origin>
+                           <Retrieval_Mode>LatestValCover</Retrieval_Mode>
+                           <T0 units="secs">0</T0>
+                           <T1 units="secs">0</T1>
+                           <File_Type>AUX_FPO_AX</File_Type>
+                           <File_Name_Type>Physical</File_Name_Type>
+                           <Input_Source_Data>false</Input_Source_Data>
+                        </Alternative>
+                     </List_of_Alternatives>
+                  </Input>
+               </List_of_Inputs>
+               <List_of_Outputs count="1">
+                  <Output>
+                     <Destination>DB</Destination>
+                     <Mandatory>Yes</Mandatory>
+                     <File_Type>ASA_APG_1P</File_Type>
+                     <File_Name_Type>Stem</File_Name_Type>
+                  </Output>
+               </List_of_Outputs>
+               <List_of_Breakpoints count="0">
+               </List_of_Breakpoints>
+            </Task>
+         </List_of_Tasks>
+      </Pool>
+   </List_of_Pools>
+</Task_Table>
