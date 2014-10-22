@@ -18,7 +18,7 @@
   <workflow id="pf-asar" title="ASAR PF-ASAR processor" abstract="ASAR PF-ASAR processor">
     <workflowVersion>1.0</workflowVersion>
     <node id="node-query">
-    	<job id="queryMaker" />
+    	<job id="query2dataset"/>
     		<sources>
                 	<source id="query_string" title="Query string" abstract="Define the queery to the Catalogue to use as input for PF-ASAR" refid="string:list" scope="runtime">http://catalogue.terradue.int/catalogue/search/ASA_IM__0P/rdf?start=2001-01-01</source>
                 </sources>

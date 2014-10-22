@@ -38,7 +38,7 @@ function cleanExit ()
      $ERR_NOJAVA)   msg="java binary not found in path";;
      $ERR_RUN)      msg="ipf-t2-0.1-SNAPSHOT.jar returned an error ($runrescode $runmessage)";;
      $ERR_CATJAR)   msg="jcatalogue-client[ver].jar or directory containing jars was not found under $DIR";;
-     $ERR_NORT)     msg="$_CIOP_APPLICATION_PATH/share/asarRT not found or not successfully packed out";;
+     $ERR_NORT)     msg="/usr/local/esa/asarRT not found or not successfully packed out";;
      $ERR_NOJO)     msg="ipf-t2 failed to generate $EOGRID_TMP/joborder.sh";;
      $ERR_LIST)     msg="AsarProducts.LIST not generated";;
      $ERR_RPT)      msg="ProductReport.rpt not generated";;
@@ -85,12 +85,12 @@ task_table=$TMPDIR/TaskTable.xml
 
 
 # environment for asarRT
-export MDAC=$_CIOP_APPLICATION_PATH/share/asarRT
+export MDAC=/usr/local/esa/asarRT
 [[ -d "$MDAC" ]] || exit $ERR_NORT
 export MDA_CONFIGURE=$MDAC
 export PATH=$MDAC/bin:$MDAC/tools:$PATH
 # LD override
-export LD_LIBRARY_PATH=$_CIOP_APPLICATION_PATH/share/asarRT/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$MDAC/lib:$LD_LIBRARY_PATH
 
 # sanity checks
 [[ -z "$JAVA_HOME" ]] && exit $ERR_JAVAHOME
