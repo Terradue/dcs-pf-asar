@@ -6,6 +6,7 @@ source ${ciop_job_include}
 SUCCESS=0
 ERR_NOPARAMS=9
 ERR_NOTASAIM=15
+ERR_MISSINGAUXCAT=20
 ERR_RUN=30
 ERR_XMLLINT=31
 ERR_TT=32
@@ -44,6 +45,7 @@ function cleanExit ()
      $ERR_NOPROD)   msg="Level 0 product not found in joborder, tasktable-to-series mismatch?";;
      $ERR_TGZ)      msg="Could not create tgz of products, joborder, and report";;
      $ERR_NOTASAIM) msg="The product provided is not an ASA_IM__0P";;
+     $ERR_MISSINGAUXCAT)   msg="No value for auxiliary dataset catalogue";;
      $DEBUG_EXIT)   msg="Breaking on debug exit";;
      *)             msg="Unknown error";;
    esac
@@ -64,6 +66,9 @@ Processing_Stage_Flag=`ciop-getparam processing_stage_flag`
 
 originator_ID=`ciop-getparam originator_id`
 [ $? != 0 ] && exit $ERR_MISSING_OI_PARAM
+
+aux_catalogue="`ciop-getparam aux_catalogue`"
+[ $? != 0 ] && exit $ERR_MISSINGAUXCAT
 
 #[ -e params ] && . params || exit $ERR_NOPARAMS
 LINTBIN=`which xmllint`
@@ -130,7 +135,7 @@ do
       -PProcessing_Stage_Flag="$Processing_Stage_Flag" \
       -Poriginator_ID="$originator_ID" -o $TMPDIR  \
       -X \
-      --aux "http://10.16.10.51/catalogue/sandbox/description" 1>&2 
+      --aux "$aux_catalogue" 1>&2 
 
   runrescode="$?"
   [ -s "$TMPDIR/genjo.ipf-t2.log" ] && runmessage=`cat $TMPDIR/genjo.ipf-t2.log`
