@@ -1,12 +1,21 @@
 #!/bin/env bash
 
+# ! / b i n / bash
+
 # source the CIOP tools
 source ${ciop_job_include}
+
+# LD override
+#export LD_LIBRARY_PATH=$_CIOP_APPLICATION_PATH/share/asarRT/lib:$LD_LIBRARY_PATH
+
+# temporary settings for testing purposes
+#TMPDIR=/tmp/1 #$_JOB_ID
+
+mkdir -p $TMPDIR
 
 SUCCESS=0
 ERR_NOPARAMS=9
 ERR_NOTASAIM=15
-ERR_MISSINGAUXCAT=20
 ERR_RUN=30
 ERR_XMLLINT=31
 ERR_TT=32
@@ -38,14 +47,13 @@ function cleanExit ()
      $ERR_NOJAVA)   msg="java binary not found in path";;
      $ERR_RUN)      msg="ipf-t2-0.1-SNAPSHOT.jar returned an error ($runrescode $runmessage)";;
      $ERR_CATJAR)   msg="jcatalogue-client[ver].jar or directory containing jars was not found under $DIR";;
-     $ERR_NORT)     msg="/usr/local/esa/asarRT not found or not successfully packed out";;
+     $ERR_NORT)     msg="$_CIOP_APPLICATION_PATH/share/asarRT not found or not successfully packed out";;
      $ERR_NOJO)     msg="ipf-t2 failed to generate $EOGRID_TMP/joborder.sh";;
      $ERR_LIST)     msg="AsarProducts.LIST not generated";;
      $ERR_RPT)      msg="ProductReport.rpt not generated";;
      $ERR_NOPROD)   msg="Level 0 product not found in joborder, tasktable-to-series mismatch?";;
      $ERR_TGZ)      msg="Could not create tgz of products, joborder, and report";;
      $ERR_NOTASAIM) msg="The product provided is not an ASA_IM__0P";;
-     $ERR_MISSINGAUXCAT)   msg="No value for auxiliary dataset catalogue";;
      $DEBUG_EXIT)   msg="Breaking on debug exit";;
      *)             msg="Unknown error";;
    esac
@@ -74,24 +82,32 @@ aux_catalogue="`ciop-getparam aux_catalogue`"
 LINTBIN=`which xmllint`
 [[ -x "$LINTBIN" ]] || exit $ERR_XMLLINT
 
-ciop-log "INFO" "task table: $task_table"
+# temporary location
+EOGRID_LOG=$TMPDIR
 
-cat "/application/pf-asar/etc/$task_table" | $LINTBIN --format - > "$TMPDIR/TaskTable.xml" 2>"$TMPDIR/TaskTable.validation.errs"
-[[ -s "$TMPDIR/TaskTable.validation.errs" ]] && exit $ERR_TT
+# output location
+OUTPUTDIR=$TMPDIR/output
+mkdir -p $OUTPUTDIR
+
+ciop-log "INFO" "task table: $task_table"
+#set -x
+#cat "/application/pf-asar/etc/$task_table" | $LINTBIN --format - > "$TMPDIR/TaskTable.xml" 2>"$EOGRID_LOG/TaskTable.validation.errs"
+#[[ -s "$EOGRID_LOG/TaskTable.validation.errs" ]] && exit $ERR_TT
 
 # switch to the validated tasktable
-task_table=$TMPDIR/TaskTable.xml
-[[ -s "$task_table" ]] || exit $ERR_TT
+#task_table=$TMPDIR/TaskTable.xml
+#[[ -s "$task_table" ]] || exit $ERR_TT
 
 
 # environment for asarRT
+#export MDAC=$_CIOP_APPLICATION_PATH/share/asarRT
 export MDAC=/usr/local/esa/asarRT
 [[ -d "$MDAC" ]] || exit $ERR_NORT
 export MDA_CONFIGURE=$MDAC
 export PATH=$MDAC/bin:$MDAC/tools:$PATH
-# LD override
 export LD_LIBRARY_PATH=$MDAC/lib:$LD_LIBRARY_PATH
 
+#ipf-t2-0.1-SNAPSHOT/bin not needed
 # sanity checks
 [[ -z "$JAVA_HOME" ]] && exit $ERR_JAVAHOME
 JAVABIN=`which java`
@@ -110,11 +126,16 @@ do
   # output location
   OUTPUTDIR=$TMPDIR/output
   mkdir -p $OUTPUTDIR
+  cat "/application/pf-asar/etc/$task_table" | $LINTBIN --format - > "$TMPDIR/TaskTable.xml" 2>"$EOGRID_LOG/TaskTable.validation.errs"
+  [[ -s "$EOGRID_LOG/TaskTable.validation.errs" ]] && exit $ERR_TT
 
+  # switch to the validated tasktable
+  local_task_table=$TMPDIR/TaskTable.xml
+  [[ -s "$local_task_table" ]] || exit $ERR_TT
   # check if it's an ASA_IM__0P product
   ciop-log "INFO" "Product $product"
   rdfproduct=${product/%atom/rdf}
-  prefix="`ciop-casmeta -f "dc:identifier" $rdfproduct | cut -c 1-9`" 
+  prefix="`ciop-casmeta -f "dc:identifier" $rdfproduct | cut -c 1-9`"
   [ "$prefix" != "ASA_IM__0" ] && exit $ERR_NOTASAIM
 
   product=${product/%rdf/atom}
@@ -130,46 +151,57 @@ do
       -Dapp.repo="$JLIBDIR" \
       -Dbasedir="$BASEDIR" \
       com.terradue.ipft2.Main \
-      -t $task_table -p $product \
+      -t $local_task_table -p $product \
       -PProduct_Counter="$Product_Counter" \
       -PProcessing_Stage_Flag="$Processing_Stage_Flag" \
       -Poriginator_ID="$originator_ID" -o $TMPDIR  \
       -X \
-      --aux "$aux_catalogue" 1>&2 
+	--aux "$aux_catalogue" 1>&2
+  #    --aux "http://10.16.10.51/catalogue/sandbox/description" 1>&2
 
   runrescode="$?"
-  [ -s "$TMPDIR/genjo.ipf-t2.log" ] && runmessage=`cat $TMPDIR/genjo.ipf-t2.log`
-  [ "$runrescode" != "0" ] && exit $ERR_RUN
+  [[ -s "$EOGRID_LOG/genjo.ipf-t2.log" ]] && runmessage=`cat $EOGRID_LOG/genjo.ipf-t2.log`
+  [[ "$runrescode" == "0" ]] || exit $ERR_RUN
 
-  [ ! -s "$TMPDIR/joborder.sh" ] && exit $ERR_NOJO
+  [[ -s "$TMPDIR/joborder.sh" ]] || exit $ERR_NOJO
 
-  ciop-log "INFO" "Running asarRT v6.00 - $TMPDIR/joborder.sh "
-  shortname=${product%/*} ;  shortname=${shortname##*/}
-   
+   # run the joborder.sh with $EOGRID_TMP as current working directory
+   cd $TMPDIR
+   ciop-log "INFO" "Running asarRT v6.00 - $TMPDIR/joborder.sh "
+   shortname=${product%/*} ;  shortname=${shortname##*/}
+
+  ciop-log "DEBUG" "shortname: $shortname"
   # sanity check on joborder:
   prodinjo=`grep $shortname $TMPDIR/joborder.xml`
-  [ "X$prodinjo" == "X" ] && exit $ERR_NOPROD
+  [[ "X$prodinjo" == "X" ]] && exit $ERR_NOPROD
   chmod 775 $TMPDIR/joborder.sh
 
-  $TMPDIR/joborder.sh
-  [ "$?" != "0" ] && exit $ERR_JOFAIL
+  ciop-log "INFO" "Process job order"
 
+  $TMPDIR/joborder.sh
+  [[ "$?" == "0" ]] || exit $ERR_JOFAIL
   [ ! -e "$TMPDIR/AsarProducts.LIST" ] && exit $ERR_LIST
   [ ! -e "$TMPDIR/ProductReport.rpt" ] && exit $ERR_RPT
 
-  mv -f  $TMPDIR/joborder.xml $TMPDIR/$shortname.xml     
-  mv -f  $TMPDIR/ProductReport.rpt $TMPDIR/$shortname.rpt
-  
+  cp -f  $TMPDIR/joborder.xml $shortname.xml
+  cp -f  ProductReport.rpt $shortname.rpt
+
+  ciop-log "DEBUG" "AsarProducts `cat AsarProducts.LIST`"
+
   prodfiles=`cat AsarProducts.LIST`
 
   archive=`cat AsarProducts.LIST`
-  tar -C $TMPDIR -cvfz $OUTPUTDIR/$archive.tgz  $prodfiles $shortname.xml $shortname.rpt 1>&2
-  [ "$?" != "0" ] && exit $ERR_TGZ
-  [ -s "$OUTPUTDIR/$archive.tgz" ] && exit $ERR_TGZ
+  tar cvfz $archive.tgz  $prodfiles $shortname.xml $shortname.rpt 1>&2
+  [[ "$?" == "0" ]] || exit $ERR_TGZ
+  [[ -s "$archive.tgz" ]] || exit $ERR_TGZ
+  mv $TMPDIR/$archive.tgz $OUTPUTDIR/
+  [[ -s "$OUTPUTDIR/$archive.tgz" ]] || exit $ERR_TGZ
 
   ciop-publish -m $OUTPUTDIR/$archive.tgz
+  cd - 1>&2
+  ##### end run of joborder.sh
 
-  # clean-up
-  rm -fr $TMPDIR/*
+   rm -fr $TMPDIR/*
 
 done
+# rm -fr $TMPDIR/*

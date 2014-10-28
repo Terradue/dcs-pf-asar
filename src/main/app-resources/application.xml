@@ -11,8 +11,11 @@
         <parameter id="processing_stage_flag" title="processing stage flag" abstract="use T" scope="test" type="LiteralData">T</parameter>
         <parameter id="originator_id" title="originator id" abstract="originator id (eg GPOD, CIOP)" scope="test" type="LiteralData">CIOP</parameter>
         <parameter id="task_table" title="Task table identifier" abstract="Use TT_ENVISAT_ASA_V0600_IM_L0-IMS_L1_GEN_N" scope="test" type="LiteralData">TT_ENVISAT_ASA_V0600_IM_L0-IMS_L1_GEN_N</parameter>
-        <parameter id="aux_catalogue">http://catalogue.terradue.int/catalogue/search</parameter>
+        <parameter id="aux_catalogue">http://catalogue.terradue.int/catalogue/search/atom</parameter>
       </defaultParameters>
+	<defaultJobconf>
+		<property id="mapred.task.timeout">9900000000000</property>	
+	</defaultJobconf>      
     </jobTemplate>
   </jobTemplates>
   <workflow id="pf-asar" title="ASAR PF-ASAR processor" abstract="ASAR PF-ASAR processor">
