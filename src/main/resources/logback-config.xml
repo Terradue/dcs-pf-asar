@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ | Project:       ${project.name}
+ | Author:        $Author: stripodi $ (Terradue Srl)
+ | Last update:   $Date: 2012-02-05 21:22:30 +0100 (Sun, 05 Feb 2012) $
+ | Element:       ify web portal
+ | Context:       services/gtu
+ | Name:          service.js
+ | Version:       ${project.version} (${implementation.build})
+ | Description:   Service descriptor for gtu. 
+ |
+ | This document is the property of Terradue and contains information directly
+ | resulting from knowledge and experience of Terradue.
+ | Any changes to this code is forbidden without written consent from Terradue Srl
+ |
+ | Contact: info@terradue.com
+-->
+<configuration>
+  <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[%level] %message%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="R" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File>${IPF-T2_HOME}/logs/ipf-t2.log</File>
+    <encoder>
+      <pattern>%d [%level] %message%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <maxIndex>5</maxIndex>
+      <FileNamePattern>logs/ipf-t2.log.%i</FileNamePattern>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <MaxFileSize>1000KB</MaxFileSize>
+    </triggeringPolicy>
+  </appender>
+
+  <root level="${logging.level}">
+    <appender-ref ref="Console" />
+    <appender-ref ref="R" />
+  </root>
+</configuration>
