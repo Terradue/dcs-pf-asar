@@ -22,6 +22,39 @@
     <github.site.repositoryName>dcs-pf-asar</github.site.repositoryName>
     <github.site.repositoryOwner>Terradue</github.site.repositoryOwner>
   </properties>
+  <dependencies>
+      <dependency>
+      <groupId>org.apache.cocoon.pipeline</groupId>
+      <artifactId>cocoon-pipeline</artifactId>
+      <version>3.0.0-alpha-3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.terradue</groupId>
+      <artifactId>jcatalogue-client</artifactId>
+      <version>0.9-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cocoon.sax</groupId>
+      <artifactId>cocoon-sax</artifactId>
+      <version>3.0.0-alpha-3</version>
+    </dependency>
+<dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-digester3</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.beust</groupId>
+      <artifactId>jcommander</artifactId>
+      <version>1.23</version>
+    </dependency>    
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>0.9.28</version>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
   <repositories>
     <repository>
       <id>repository.terradue.com</id>
@@ -197,5 +230,53 @@
       </executions>
       </plugin>
     </plugins>
+    <pluginManagement>
+    	<plugins>
+    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+    		<plugin>
+    			<groupId>org.eclipse.m2e</groupId>
+    			<artifactId>lifecycle-mapping</artifactId>
+    			<version>1.0.0</version>
+    			<configuration>
+    				<lifecycleMappingMetadata>
+    					<pluginExecutions>
+    						<pluginExecution>
+    							<pluginExecutionFilter>
+    								<groupId>org.codehaus.mojo</groupId>
+    								<artifactId>
+    									build-helper-maven-plugin
+    								</artifactId>
+    								<versionRange>[1.8,)</versionRange>
+    								<goals>
+    									<goal>parse-version</goal>
+    								</goals>
+    							</pluginExecutionFilter>
+    							<action>
+    								<ignore></ignore>
+    							</action>
+    						</pluginExecution>
+    						<pluginExecution>
+    							<pluginExecutionFilter>
+    								<groupId>org.codehaus.mojo</groupId>
+    								<artifactId>
+    									rpm-maven-plugin
+    								</artifactId>
+    								<versionRange>
+    									[2.1-alpha-4,)
+    								</versionRange>
+    								<goals>
+    									<goal>version</goal>
+    								</goals>
+    							</pluginExecutionFilter>
+    							<action>
+    								<ignore></ignore>
+    							</action>
+    						</pluginExecution>
+    					</pluginExecutions>
+    				</lifecycleMappingMetadata>
+    			</configuration>
+    		</plugin>
+    	</plugins>
+    </pluginManagement>
   </build>
 </project>

@@ -32,7 +32,6 @@ import com.terradue.ipft2.xml.ProcessingParametersTransformer;
 import com.terradue.ipft2.xml.TaskTableAlternativesFilter;
 import com.terradue.jcatalogue.client.CatalogueClient;
 import com.terradue.jcatalogue.client.DataSet;
-import com.terradue.jcatalogue.client.HttpMethod;
 import com.terradue.jcatalogue.client.Parameter;
 
 @Parameters( commandDescription = "TastTable to JobOrder processor" )
