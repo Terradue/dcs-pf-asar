@@ -28,10 +28,16 @@
       <artifactId>cocoon-pipeline</artifactId>
       <version>3.0.0-alpha-3</version>
     </dependency>
+
     <dependency>
-      <groupId>com.terradue</groupId>
-      <artifactId>jcatalogue-client</artifactId>
+      <groupId>com.terradue.jcatalogue</groupId>
+      <artifactId>jcatalogue-client-core</artifactId>
       <version>0.9-SNAPSHOT</version>
+    </dependency>    
+     <dependency>
+      <groupId>org.apache.cocoon.pipeline</groupId>
+      <artifactId>cocoon-pipeline</artifactId>
+      <version>3.0.0-alpha-3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.cocoon.sax</groupId>
@@ -54,6 +60,11 @@
       <version>0.9.28</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-exec</artifactId>
+      <version>1.1</version>
+    </dependency>    
   </dependencies>
   <repositories>
     <repository>
@@ -76,6 +87,24 @@
   </pluginRepositories>
   <build>
     <plugins>
+		<plugin>
+			<artifactId>maven-jar-plugin</artifactId>
+			<executions>
+				<execution>
+					<phase>prepare-package</phase>
+					<goals>
+						<goal>jar</goal>
+					</goals>
+					<configuration>
+						<classifier>ipf-t2</classifier>
+						<includes>
+							<include>**/ipft2/*</include>
+							<include>**/ipft2/*/*</include>
+						</includes>
+					</configuration>
+				</execution>
+			</executions>
+		</plugin>    
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <version>2.5</version>
@@ -107,7 +136,7 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
+      <!-- plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.6</version>
         <executions>
@@ -127,7 +156,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>rpm-maven-plugin</artifactId>
@@ -167,7 +196,24 @@
               </sources>
               <filemode>775</filemode>
             </mapping>
-          </mappings>
+            
+			<mapping>
+              <directory>/application/pf-asar/lib/</directory>
+              <dependency/>
+              <filemode>775</filemode>
+            </mapping>    
+                    
+			<mapping>
+              <directory>/application/pf-asar/lib/</directory>
+              <artifact>
+              	<classifiers>
+              		<classifier>ipf-t2</classifier>
+              	</classifiers>
+              </artifact>
+              <filemode>775</filemode>
+            </mapping>                     
+                    
+          </mappings>          
           <provides>
             <provide>${project.artifactId}</provide>
           </provides>

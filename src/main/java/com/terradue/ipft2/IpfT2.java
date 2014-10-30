@@ -133,7 +133,7 @@ public final class IpfT2
             Date endPosition = null;
             Parameter startDate = null;
             Parameter endDate = null;
-            logger.info("testtest" + levelZeroDataSet.getBeginPosition());
+            logger.debug("testtest" + levelZeroDataSet.getBeginPosition());
 
             if (levelZeroDataSet.getBeginPosition() == null) { //case of dc:date
             	beginPosition = originDateFormat.parse(levelZeroDataSet.getDatePosition().split("/")[0]);
