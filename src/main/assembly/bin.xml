@@ -31,13 +31,13 @@
     <!--
      | core libraries
     -->
-    <fileSet>
+    <!-- fileSet>
       <directory>${project.build.directory}/appassembler/lib/</directory>
       <outputDirectory>/lib</outputDirectory>
       <excludes>
         <exclude>*.xml</exclude>
       </excludes>
-    </fileSet>
+    </fileSet-->
   </fileSets>
 
 </assembly>

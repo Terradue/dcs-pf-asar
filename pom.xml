@@ -28,11 +28,32 @@
       <artifactId>cocoon-pipeline</artifactId>
       <version>3.0.0-alpha-3</version>
     </dependency>
-
+    <!-- dependency>
+      <groupId>com.ning</groupId>
+      <artifactId>async-http-client</artifactId>
+      <version>1.7.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency-->
     <dependency>
-      <groupId>com.terradue.jcatalogue</groupId>
-      <artifactId>jcatalogue-client-core</artifactId>
+      <groupId>com.terradue</groupId>
+      <artifactId>jcatalogue-client</artifactId>
       <version>0.9-SNAPSHOT</version>
+        <!-- exclusions>
+        <exclusion>
+          <groupId>com.ning</groupId>
+          <artifactId>async-http-client</artifactId>
+        </exclusion>
+      </exclusions-->
+    </dependency>    
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.4</version>
     </dependency>    
      <dependency>
       <groupId>org.apache.cocoon.pipeline</groupId>
@@ -44,7 +65,7 @@
       <artifactId>cocoon-sax</artifactId>
       <version>3.0.0-alpha-3</version>
     </dependency>
-<dependency>
+	<dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-digester3</artifactId>
       <version>3.1</version>
@@ -174,6 +195,12 @@
           <prefix>/application</prefix>
           <autoRequires>true</autoRequires>
           <release>ciop</release>
+		<defineStatements>
+			<defineStatement>__jar_repack 0</defineStatement>
+			<defineStatement>__os_install_post %{nil}</defineStatement>
+			<defineStatement>_target_cpu noarch</defineStatement>
+			<defineStatement>_target_os linux</defineStatement>
+		</defineStatements>          
           <mappings>
             <mapping>
               <directory>/application</directory>
@@ -217,9 +244,9 @@
           <provides>
             <provide>${project.artifactId}</provide>
           </provides>
-          <requires>
+          <!-- requires>
             <require>pf-asar</require>
-          </requires>
+          </requires-->
           <needarch>noarch</needarch>
         </configuration>
       </plugin>
