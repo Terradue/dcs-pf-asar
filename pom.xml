@@ -15,7 +15,7 @@
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+    <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding> 
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.deploy.skip>true</maven.deploy.skip>
     <github.global.server>github</github.global.server>
@@ -28,7 +28,7 @@
       <artifactId>cocoon-pipeline</artifactId>
       <version>3.0.0-alpha-3</version>
     </dependency>
-    <!-- dependency>
+    <dependency>
       <groupId>com.ning</groupId>
       <artifactId>async-http-client</artifactId>
       <version>1.7.2</version>
@@ -38,18 +38,39 @@
           <artifactId>slf4j-api</artifactId>
         </exclusion>
       </exclusions>
-    </dependency-->
+    </dependency>
+    <dependency>
+      <groupId>xalan</groupId>
+      <artifactId>xalan</artifactId>
+      <version>2.7.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>    
     <dependency>
       <groupId>com.terradue</groupId>
       <artifactId>jcatalogue-client</artifactId>
       <version>0.9-SNAPSHOT</version>
-        <!-- exclusions>
+        <exclusions>
         <exclusion>
           <groupId>com.ning</groupId>
           <artifactId>async-http-client</artifactId>
         </exclusion>
-      </exclusions-->
-    </dependency>    
+      </exclusions>
+    </dependency>   
+    <dependency>
+		<groupId>xalan</groupId>
+		<artifactId>serializer</artifactId>
+		<version>2.7.1</version>
+	</dependency>
+    <dependency>
+		<groupId>com.fasterxml</groupId>
+		<artifactId>aalto-xml</artifactId>
+		<version>0.9.8</version>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -157,27 +178,6 @@
           </execution>
         </executions>
       </plugin>
-      <!-- plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
-        <executions>
-          <execution>
-            <id>copy-app-resources</id>
-            <phase>install</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>/application</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${basedir}/src/main/app-resources</directory>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>rpm-maven-plugin</artifactId>
@@ -209,6 +209,7 @@
                   <location>${basedir}/src/main/app-resources</location>
                 </source>
               </sources>
+              <filemode>775</filemode>
             </mapping>
             <mapping>
               <directory>/application</directory>
@@ -221,9 +222,7 @@
                   </includes>
                 </source>
               </sources>
-              <filemode>775</filemode>
-            </mapping>
-            
+            </mapping>            
 			<mapping>
               <directory>/application/pf-asar/lib/</directory>
               <dependency/>
@@ -244,9 +243,10 @@
           <provides>
             <provide>${project.artifactId}</provide>
           </provides>
-          <!-- requires>
-            <require>pf-asar</require>
-          </requires-->
+          <requires>
+            <require>asarRT</require>
+            <require>csh</require>
+          </requires>
           <needarch>noarch</needarch>
         </configuration>
       </plugin>
