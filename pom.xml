@@ -207,7 +207,10 @@
 					<outputDirectory>/application/pf-asar/lib</outputDirectory>
 					<resources>
 						<resource>
-							<directory>${project.build.directory}/dependency/jars</directory>
+							<directory>${project.build.directory}</directory>
+							<includes>
+							          <include>**/*.jar</include>
+							</includes>
 						</resource>
 					</resources>
 				</configuration>
@@ -226,7 +229,7 @@
 					<goal>copy-dependencies</goal>
 				</goals>
 				<configuration>
-					<outputDirectory>${project.build.directory}/dependency/jars</outputDirectory>
+					<outputDirectory>/application/pf-asar/lib/</outputDirectory>
 				</configuration>
 			</execution>
 		</executions>
@@ -262,7 +265,6 @@
                   <location>${basedir}/src/main/app-resources</location>
                 </source>
               </sources>
-              <filemode>775</filemode>
             </mapping>
             <mapping>
               <directory>/application</directory>
@@ -279,7 +281,6 @@
             <mapping>
               <directory>/application/pf-asar/lib/</directory>
               <dependency/>
-              <filemode>775</filemode>
             </mapping>            
             <mapping>
               <directory>/application/pf-asar/lib/</directory>
@@ -288,7 +289,6 @@
               		<classifier>ipf-t2</classifier>
               	</classifiers>
               </artifact>
-              <filemode>775</filemode>
             </mapping>                            
           </mappings>          
           <provides>
@@ -311,7 +311,7 @@
             <phase>install</phase>
             <configuration>
               <target>
-                <chmod dir="/application" includes="**/bin/*, **/run*" perm="755"/>
+                <chmod dir="/application" excludes="**/share/*/bin/*" includes="**/bin/*, **/run*" perm="755"/>
               </target>
             </configuration>
             <goals>
