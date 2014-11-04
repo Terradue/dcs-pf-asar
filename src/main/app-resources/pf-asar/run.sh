@@ -1,15 +1,7 @@
 #!/bin/env bash
 
-# ! / b i n / bash
-
 # source the CIOP tools
 source ${ciop_job_include}
-
-# LD override
-#export LD_LIBRARY_PATH=$_CIOP_APPLICATION_PATH/share/asarRT/lib:$LD_LIBRARY_PATH
-
-# temporary settings for testing purposes
-#TMPDIR=/tmp/1 #$_JOB_ID
 
 mkdir -p $TMPDIR
 
@@ -78,7 +70,6 @@ originator_ID=`ciop-getparam originator_id`
 aux_catalogue="`ciop-getparam aux_catalogue`"
 [ $? != 0 ] && exit $ERR_MISSINGAUXCAT
 
-#[ -e params ] && . params || exit $ERR_NOPARAMS
 LINTBIN=`which xmllint`
 [[ -x "$LINTBIN" ]] || exit $ERR_XMLLINT
 
@@ -90,14 +81,6 @@ OUTPUTDIR=$TMPDIR/output
 mkdir -p $OUTPUTDIR
 
 ciop-log "INFO" "task table: $task_table"
-#set -x
-#cat "/application/pf-asar/etc/$task_table" | $LINTBIN --format - > "$TMPDIR/TaskTable.xml" 2>"$EOGRID_LOG/TaskTable.validation.errs"
-#[[ -s "$EOGRID_LOG/TaskTable.validation.errs" ]] && exit $ERR_TT
-
-# switch to the validated tasktable
-#task_table=$TMPDIR/TaskTable.xml
-#[[ -s "$task_table" ]] || exit $ERR_TT
-
 
 # environment for asarRT
 export MDAC=$_CIOP_APPLICATION_PATH/share/asarRT
@@ -106,7 +89,6 @@ export MDA_CONFIGURE=$MDAC
 export PATH=$MDAC/bin:$MDAC/tools:$PATH
 export LD_LIBRARY_PATH=$MDAC/lib:$LD_LIBRARY_PATH
 
-#ipf-t2-0.1-SNAPSHOT/bin not needed
 # sanity checks
 [[ -z "$JAVA_HOME" ]] && exit $ERR_JAVAHOME
 JAVABIN=`which java`
@@ -156,7 +138,6 @@ do
       -Poriginator_ID="$originator_ID" -o $TMPDIR  \
       -X \
 	--aux "$aux_catalogue" 1>&2
-  #    --aux "http://10.16.10.51/catalogue/sandbox/description" 1>&2
 
   runrescode="$?"
   [[ -s "$EOGRID_LOG/genjo.ipf-t2.log" ]] && runmessage=`cat $EOGRID_LOG/genjo.ipf-t2.log`
@@ -203,4 +184,3 @@ do
    rm -fr $TMPDIR/*
 
 done
-# rm -fr $TMPDIR/*
