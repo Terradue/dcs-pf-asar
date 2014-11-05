@@ -188,9 +188,8 @@
           <group>air</group>
           <packager>Terradue</packager>
           <name>${project.artifactId}</name>
-          <defaultDirmode>775</defaultDirmode>
-          <defaultFilemode>664</defaultFilemode>
-          <defaultUsername>root</defaultUsername>
+       	  <defaultDirmode>775</defaultDirmode>
+          <defaultUsername>fbarchetta</defaultUsername>
           <defaultGroupname>ciop</defaultGroupname>
           <prefix>/application</prefix>
           <autoRequires>true</autoRequires>
@@ -222,6 +221,7 @@
                   </includes>
                 </source>
               </sources>
+              <filemode>775</filemode>
             </mapping>            
 			<mapping>
               <directory>/application/pf-asar/lib/</directory>
