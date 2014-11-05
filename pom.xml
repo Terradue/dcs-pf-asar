@@ -62,14 +62,14 @@
       </exclusions>
     </dependency>   
     <dependency>
-		<groupId>xalan</groupId>
-		<artifactId>serializer</artifactId>
-		<version>2.7.1</version>
+    	<groupId>xalan</groupId>
+	<artifactId>serializer</artifactId>
+	<version>2.7.1</version>
 	</dependency>
     <dependency>
-		<groupId>com.fasterxml</groupId>
-		<artifactId>aalto-xml</artifactId>
-		<version>0.9.8</version>
+	<groupId>com.fasterxml</groupId>
+	<artifactId>aalto-xml</artifactId>
+	<version>0.9.8</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -129,25 +129,25 @@
   </pluginRepositories>
   <build>
     <plugins>
-		<plugin>
-			<artifactId>maven-jar-plugin</artifactId>
-			<executions>
-				<execution>
-					<phase>prepare-package</phase>
-					<goals>
-						<goal>jar</goal>
-					</goals>
-					<configuration>
-						<classifier>ipf-t2</classifier>
-						<includes>
-							<include>**/ipft2/*</include>
-							<include>**/ipft2/*/*</include>
-						</includes>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>    
-      <plugin>
+	<plugin>
+		<artifactId>maven-jar-plugin</artifactId>
+		<executions>
+			<execution>
+				<phase>prepare-package</phase>
+				<goals>
+					<goal>jar</goal>
+				</goals>
+				<configuration>
+					<classifier>ipf-t2</classifier>
+					<includes>
+						<include>**/ipft2/*</include>
+						<include>**/ipft2/*/*</include>
+					</includes>
+				</configuration>
+			</execution>
+		</executions>
+	</plugin>    
+      	<plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <version>2.5</version>
         <configuration>
@@ -178,7 +178,63 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
+	<plugin>
+		<artifactId>maven-resources-plugin</artifactId>
+		<version>2.6</version>
+		<executions>
+			<execution>
+				<id>copy-app-resources</id>
+				<phase>install</phase>
+				<goals>
+					<goal>copy-resources</goal>
+				</goals>
+				<configuration>
+					<outputDirectory>/application</outputDirectory>
+					<resources>
+						<resource>
+							<directory>${basedir}/src/main/app-resources</directory>
+						</resource>
+					</resources>
+				</configuration>
+			</execution>
+			<execution>
+				<id>copy-jars</id>
+				<phase>install</phase>
+				<goals>
+					<goal>copy-resources</goal>
+				</goals>
+				<configuration>
+					<outputDirectory>/application/pf-asar/lib</outputDirectory>
+					<resources>
+						<resource>
+							<directory>${project.build.directory}</directory>
+							<includes>
+							          <include>**/*.jar</include>
+							</includes>
+						</resource>
+					</resources>
+				</configuration>
+			</execution>      
+		</executions>
+	</plugin>
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-dependency-plugin</artifactId>
+		<version>2.4</version>
+		<executions>
+			<execution>
+				<id>src-lib_dependencies</id>
+				<phase>prepare-package</phase>
+				<goals>
+					<goal>copy-dependencies</goal>
+				</goals>
+				<configuration>
+					<outputDirectory>/application/pf-asar/lib/</outputDirectory>
+				</configuration>
+			</execution>
+		</executions>
+	</plugin>	
+	<plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>rpm-maven-plugin</artifactId>
         <extensions>true</extensions>
@@ -208,7 +264,6 @@
                   <location>${basedir}/src/main/app-resources</location>
                 </source>
               </sources>
-              <filemode>775</filemode>
             </mapping>
             <mapping>
               <directory>/application</directory>
@@ -223,29 +278,25 @@
               </sources>
               <filemode>775</filemode>
             </mapping>            
-			<mapping>
+            <mapping>
               <directory>/application/pf-asar/lib/</directory>
               <dependency/>
-              <filemode>775</filemode>
-            </mapping>    
-                    
-			<mapping>
+            </mapping>            
+            <mapping>
               <directory>/application/pf-asar/lib/</directory>
               <artifact>
               	<classifiers>
               		<classifier>ipf-t2</classifier>
               	</classifiers>
               </artifact>
-              <filemode>775</filemode>
-            </mapping>                     
-                    
+            </mapping>                            
           </mappings>          
           <provides>
-            <provide>${project.artifactId}</provide>
+          	<provide>${project.artifactId}</provide>
           </provides>
           <requires>
-            <require>asarRT</require>
-            <require>csh</require>
+          	<require>asarRT</require>
+           	<require>csh</require>
           </requires>
           <needarch>noarch</needarch>
         </configuration>
@@ -260,7 +311,7 @@
             <phase>install</phase>
             <configuration>
               <target>
-                <chmod dir="/application" includes="**/bin/*, **/run*" perm="755"/>
+                <chmod dir="/application" excludes="**/share/*/bin/*" includes="**/bin/*, **/run*" perm="755"/>
               </target>
             </configuration>
             <goals>
