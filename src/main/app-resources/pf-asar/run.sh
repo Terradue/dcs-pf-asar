@@ -99,9 +99,9 @@ JLIBDIRFULL=`find $_CIOP_APPLICATION_PATH/pf-asar/lib -type f -a -name "jcatalog
 JLIBDIR=${JLIBDIRFULL%/*.jar}
 [[ -d "$JLIBDIR" ]] || exit $ERR_CATJAR
 
-CLASSPATH="$JLIBDIRFULL":"$JLIBDIR"/async-http-client-1.7.2.jar:"$JLIBDIR"/netty-3.3.1.Final.jar:"$JLIBDIR"/not-yet-commons-ssl-0.3.11.jar:"$JLIBDIR"/slf4j-api-1.6.4.jar:"$JLIBDIR"/jcommander-1.23.jar:"$JLIBDIR"/logback-classic-0.9.28.jar:"$JLIBDIR"/logback-core-0.9.28.jar:"$JLIBDIR"/cocoon-pipeline-3.0.0-alpha-3.jar:"$JLIBDIR"/commons-logging-1.1.1.jar:"$JLIBDIR"/cocoon-sax-3.0.0-alpha-3.jar:"$JLIBDIR"/cocoon-xml-2.0.2.jar:"$JLIBDIR"/commons-digester3-3.1.jar:"$JLIBDIR"/commons-beanutils-1.8.3.jar:"$JLIBDIR"/xalan-2.7.1.jar:"$JLIBDIR"/serializer-2.7.1.jar:"$JLIBDIR"/dcs-pf-asar-0.1-SNAPSHOT-ipf-t2.jar:"$JLIBDIR"/aalto-xml-0.9.8.jar:"$JLIBDIR"/wstx-asl-3.2.6.jar:"$JLIBDIR"/stax2-api-3.0.3.jar:"$JLIBDIR"/commons-exec-1.1.jar
+#CLASSPATH="$JLIBDIRFULL":"$JLIBDIR"/async-http-client-1.7.2.jar:"$JLIBDIR"/netty-3.3.1.Final.jar:"$JLIBDIR"/not-yet-commons-ssl-0.3.11.jar:"$JLIBDIR"/slf4j-api-1.6.4.jar:"$JLIBDIR"/jcommander-1.23.jar:"$JLIBDIR"/logback-classic-0.9.28.jar:"$JLIBDIR"/logback-core-0.9.28.jar:"$JLIBDIR"/cocoon-pipeline-3.0.0-alpha-3.jar:"$JLIBDIR"/commons-logging-1.1.1.jar:"$JLIBDIR"/cocoon-sax-3.0.0-alpha-3.jar:"$JLIBDIR"/cocoon-xml-2.0.2.jar:"$JLIBDIR"/commons-digester3-3.1.jar:"$JLIBDIR"/commons-beanutils-1.8.3.jar:"$JLIBDIR"/xalan-2.7.1.jar:"$JLIBDIR"/serializer-2.7.1.jar:"$JLIBDIR"/dcs-pf-asar-0.1-SNAPSHOT-ipf-t2.jar:"$JLIBDIR"/aalto-xml-0.9.8.jar:"$JLIBDIR"/wstx-asl-3.2.6.jar:"$JLIBDIR"/stax2-api-3.0.3.jar:"$JLIBDIR"/commons-exec-1.1.jar
 EXTRA_JVM_ARGUMENTS="-DIPF-T2_HOME=$MDAC -Xms500m -Xmx500m -XX:PermSize=128m -XX:-UseGCOverheadLimit"
-
+CLASSPATH="$JLIBDIRFULL":"$JLIBDIR"/*
 while read product
 do
   # output location

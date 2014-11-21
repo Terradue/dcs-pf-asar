@@ -17,6 +17,8 @@ Log on the developer sandbox and run these commands in a shell:
 
 * Install **asarRT** and **csh**
 
+Notice that in order to get access to asarRT you need to contact the European Space Agency
+
 ```bash
 sudo yum install -y asarRT csh
 ```
