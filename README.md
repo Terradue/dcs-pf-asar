@@ -1,6 +1,4 @@
-## Developer Cloud Service - PF-ASAR tutorial
-
-
+## Developer Cloud Service - PF-ASAR 
 
 ### Getting Started 
 
