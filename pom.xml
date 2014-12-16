@@ -6,7 +6,7 @@
   <packaging>rpm</packaging>
   <name>dcs-pf-asar</name>
   <description>dcs-pf-asar</description>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <scm>
     <connection>scm:git:git@github.com:Terradue/dcs-pf-asar.git</connection>
     <developerConnection>scm:git:git@github.com:Terradue/dcs-pf-asar.git</developerConnection>
